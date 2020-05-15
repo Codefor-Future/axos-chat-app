@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>wtf</title>
+    <style>
+        body{
+            overflow: scroll;
+        }
+        .sndBtn{
+            background-color: transparent;
+        }
+        input{
+            border-radius: 20px;
+            background-image: linear-gradient(20deg, rgb(25, 172, 230), rgb(21, 163, 168));
+        }
+        .inputFieldWraper{
+            position: fixed;
+            bottom: 10px;
+            width: 90%;
+        }
+        ul{
+            padding:0px;
+            display: flex;
+            flex-direction: column-reverse;
+            width: 100%;
+            overflow:hidden;
+            overflow-y:scroll;
+        }
+        li{
+            flex: 0 0 auto;
+            overflow-wrap: break-word;
+            /* font-size: 15px; */
+            color: rgba(2, 2, 54, 0.705);
+        }
+        .listWraper{
+            height: 70vh;
+            position: relative;
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 100px;
+            overflow: scroll;
+        }
+
+        .sendedMsg{
+            border-top-left-radius: 25px;
+            border-bottom-left-radius: 25px;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: rgba(59, 153, 153, 0.281);
+            width: 80%;
+            margin-left: 20%;
+            border-bottom-right-radius: 15px;
+
+        }
+        .recievedMsg{
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: rgba(104, 243, 134, 0.39);
+            width: 80%;
+            border-bottom-right-radius: 25px;
+            border-top-right-radius: 25px;
+            border-bottom-left-radius: 15px;
+        }
+        ::placeholder{
+            color: rgba(236, 236, 236, 0.863);
+        }
+    </style>
+</head>
+<body>
+
+<div id="app" class="container text-center">
+<!-- loggin form -->
+    <div v-if="!loggedIn">
+        <h1 class="">LOG IN</h1>
+        <label for="username">username</label> <br>
+        <input type="text" class="border-0 ml-3 px-3 py-1 col-9" id="username" v-model="username" > <br>
+        <label for="password">password</label> <br>
+        <input class="border-0 ml-3 px-3 py-1 col-9"  type="password" id="password" v-model="password" v-on:keyup.enter="login">
+    </div>
+<!-- /loggin form -->
+
+
+<!-- main messaging app -->
+<div v-else>
+        <div class="listWraper" >
+            <ul type=none >
+                <li v-for="message in messages" class="msgBox text-left" :class="{'text-right':message.type==='sended', 'sendedMsg':message.type==='sended', 'recievedMsg':message.type==='recieved'}" >
+                    {{message.message}}
+                </li>
+            </ul>
+        </div>
+
+        <div class="inputFieldWraper row">
+            <input class="border-0 ml-3 px-3 py-1 col-9" type="text" v-model="newMessage" @keyup.enter="sendMsg" :placeholder="typing">
+            <button class="btn btn-sm p-2 col-2 sndBtn" @click="sendMsg">Send</button>
+        </div>
+</div>
+<!-- /main app  -->
+</div> 
+
+
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>    
+    <script>
+        var socket = io();
+        let app= new Vue({
+            el:"#app",
+            data:{
+                loggedIn:false,
+                newMessage:null,
+                messages:[],
+                typing:"type your message",
+                online:"online",
+                username:"",
+                password:null
+            },
+            watch:{
+                newMessage(value){
+                    socket.emit("typing",value)
+                },
+                online(value){
+                    socket.emit("online",value)
+                }
+
+            },
+            methods:{
+                sendMsg(){
+                    if(this.newMessage){
+                    socket.emit("newMsg",this.newMessage)
+                    this.messages.push({message:this.newMessage,type:"sended"})
+                    this.newMessage=null
+                    }
+                },
+                async login(){
+                    await axios.post("/login",{
+                        username:this.username,
+                        password:this.password
+                    })
+                    .then((response)=>{
+                       console.log(response.data); 
+                       this.loggedIn=response.data.loggedIn
+                    },(error)=>{
+                        console.log(error);
+                    })
+                }
+            },
+            created(){
+                socket.on("newMsg",(message)=>{
+                    this.messages.push({message:message,type:"recieved"})
+                })
+                socket.on("typing",(value)=>{
+                    if(value){
+                        this.typing=value
+                    }else{
+                        this.typing="what are you thinking..."
+                    }
+                })
+            }
+        });
+
+
+        function vis(){
+            if(document.visibilityState=="visible"){
+                app.online="online"
+            }else{
+                app.online="offline"
+            }
+        }
+        document.addEventListener("visibilitychange", vis,false)
+
+    </script>
+</body>
+</html>
