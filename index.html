@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>wtf</title>
+    <title>chat</title>
     <style>
         body{
             overflow: scroll;
@@ -73,19 +73,10 @@
 <body>
 
 <div id="app" class="container text-center">
-<!-- loggin form -->
-    <div v-if="!loggedIn">
-        <h1 class="">LOG IN</h1>
-        <label for="username">username</label> <br>
-        <input type="text" class="border-0 ml-3 px-3 py-1 col-9" id="username" v-model="username" > <br>
-        <label for="password">password</label> <br>
-        <input class="border-0 ml-3 px-3 py-1 col-9"  type="password" id="password" v-model="password" v-on:keyup.enter="login">
-    </div>
-<!-- /loggin form -->
 
 
 <!-- main messaging app -->
-<div v-else>
+<div>
         <div class="listWraper" >
             <ul type=none >
                 <li v-for="message in messages" class="msgBox text-left" :class="{'text-right':message.type==='sended', 'sendedMsg':message.type==='sended', 'recievedMsg':message.type==='recieved'}" >
