@@ -17,11 +17,6 @@ app.get("/login",(req,res)=>{
 })
 app.post("/login",(req,res)=>{
     if(users.indexOf(req.body.username)==-1){
-        // users.push({
-        //     socketid: null,
-        //     name:req.body.username
-        // })
-        // console.log(users)
         res.status(200).cookie("username",req.body.username).send(req.body.username)
     }else{
         res.status(204).send()
@@ -71,6 +66,10 @@ io.on("connection", (socket)=>{
 
 })
 
-http.listen(3000, ()=>{
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8000;
+}
+app.listen(port,()=>{
     console.log("connection done")
-})
+});
