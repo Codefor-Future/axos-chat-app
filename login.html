@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>login</title>
+</head>
+<body>
+    <div>
+        <label for="username" id="userLabel">Username</label>
+        <input type="text" id="username">
+        <button onclick="send()">login</button>
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        async function send(){
+            username=document.getElementById("username").value
+            if(!username){
+                document.getElementById("userLabel").innerHTML=" Try valid username"
+            }else{
+            await axios.post("/login",
+            {
+                username:username
+            })
+            .then(function(res){
+                if(res.status===200){
+                    window.location.href="/chat";
+                }else{
+                    document.getElementById("userLabel").innerHTML=" Try another username"
+                }
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+        }}
+    </script>
+</body>
+</html>
