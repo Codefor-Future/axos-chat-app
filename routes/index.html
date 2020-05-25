@@ -137,9 +137,13 @@
   .sidebar a {font-size: 18px;}
 }
 
-
-
-
+        .mainHead{
+            color: rgba(53, 52, 52, 0.815);
+            position: fixed;
+            top:25px;
+            right: 50px;
+        }
+        
 
 
 
@@ -163,7 +167,11 @@
         <button onclick="openNav()" @click="updateUsers"  class="btn-sm btn-dark m-3">Users</button>
 
     
-
+        <h2 class="mainHead">Axos</h2>
+        
+        
+        
+        
         <div id="mySidebar" class="sidebar">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
             <a href="#" v-for="user in users" :key=user.socketid class=" my-2 py-1 rounded text-white">
