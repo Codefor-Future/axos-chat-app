@@ -7,9 +7,20 @@ const bodyParser= require('body-parser')
 
 app.use(bodyParser.json());
 var users=[]
-
-
 const {chat}= require("./routes/handleRoutes")
+
+
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8000;
+}
+app.listen(port,()=>{
+    console.log("connection done")
+});
+let io= require("socket.io").listen(http)
+
+
+
 
 app.get("/chat",chat)
 app.get("/login",(req,res)=>{
@@ -65,12 +76,3 @@ io.on("connection", (socket)=>{
 
 
 })
-
-let port = process.env.PORT;
-if (port == null || port == "") {
-  port = 8000;
-}
-app.listen(port,()=>{
-    console.log("connection done")
-});
-let io= require("socket.io").listen(http)
