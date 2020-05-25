@@ -1,7 +1,7 @@
 const express = require("express");
 const app=express()
 const http = require("http").Server(app)
-let io= require("socket.io")(http)
+let io= require("socket.io").listen(http)
 io.set('resource', '/socket.io');
 
 const bodyParser= require('body-parser')
