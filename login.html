@@ -5,12 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>login</title>
+    <style>
+        body{
+            background-image: url("https://image.freepik.com/free-vector/conversation-concept-illustration_114360-1102.jpg");
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position-y: top;
+        }
+        .login{
+            position: fixed;
+            top: 40vh;
+        }
+        input{
+            border-radius: 20px;
+            background-image: linear-gradient(20deg, rgb(25, 172, 230), rgb(21, 163, 168));
+            border:0px;
+            padding: 11px;
+        }
+        label{
+            color: rgba(37, 128, 156, 0.705);
+            margin: 10px;
+            font-size: 14px;
+        }
+        button{
+            margin: 5px;
+            background-image: linear-gradient(20deg, rgb(99, 188, 223), rgb(21, 163, 168));
+            padding: 10px;
+            border-radius: 20px;
+            border: 0px;
+            color: rgba(255, 255, 255, 0.678);
+        }
+    </style>
 </head>
 <body>
-    <div>
+    <div class="login">
         <label for="username" id="userLabel">Username</label>
-        <input type="text" id="username">
-        <button onclick="send()">login</button>
+        <input type="text" id="username" placeholder="Your Good name please">
+        <button onclick="send()">Login</button>
     </div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
