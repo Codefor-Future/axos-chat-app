@@ -13,9 +13,19 @@
             background-repeat: no-repeat;
             background-position-y: top;
         }
+        @media only screen and (min-width:600px) {
+            body{
+                background-position-x: right;
+                background-position: top;
+                background-size: 700px;
+            }
+            .login{
+                margin-left: 70px;
+            }
+        }
         .login{
             position: fixed;
-            top: 40vh;
+            top: 60vh;
         }
         input{
             border-radius: 20px;
@@ -40,8 +50,8 @@
 </head>
 <body>
     <div class="login">
-        <label for="username" id="userLabel">Username</label>
-        <input type="text" id="username" placeholder="Your Good name please">
+        <label for="username" id="userLabel">Username</label><br>
+        <input type="text" id="username" placeholder="Your Good name please"><br>
         <button onclick="send()">Login</button>
     </div>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
