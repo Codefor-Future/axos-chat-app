@@ -278,6 +278,8 @@
                     this.users=users
                 })
                 socket.on("flashMsg",(msg)=>{
+                    var audio = new Audio('notifi.mp3');
+                    audio.play();
                     this.flashMsgShow=true;
                     this.flashMsgMsg=msg;
                     setTimeout(()=>{
