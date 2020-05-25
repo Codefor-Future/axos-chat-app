@@ -1,7 +1,6 @@
 const express = require("express");
 const app=express()
 const http = require("http").Server(app)
-let io= require("socket.io").listen(http)
 
 
 const bodyParser= require('body-parser')
@@ -74,3 +73,4 @@ if (port == null || port == "") {
 app.listen(port,()=>{
     console.log("connection done")
 });
+let io= require("socket.io").listen(http)
