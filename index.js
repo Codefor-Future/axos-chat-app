@@ -1,7 +1,9 @@
-const express = require("express");
-const app=express()
-const http = require("http").Server(app)
+var express = require('express')
+var http = require('http');
 
+var app = express();
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
 
 const bodyParser= require('body-parser')
 
@@ -14,10 +16,10 @@ let port = process.env.PORT;
 if (port == null || port == "") {
   port = 8000;
 }
-app.listen(port,()=>{
+server.listen(port,()=>{
     console.log("connection done")
 });
-let io= require("socket.io").listen(http)
+
 
 
 
