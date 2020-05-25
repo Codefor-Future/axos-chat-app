@@ -29,10 +29,10 @@ app.get("/login",(req,res)=>{
     res.sendFile(__dirname+"/login.html")
 })
 app.post("/login",(req,res)=>{
-    if(users.indexOf(req.body.username)==-1){
+    if(users.indexOf(req.body.username)===-1){
         res.status(200).cookie("username",req.body.username).send(req.body.username)
     }else{
-        res.status(204).send()
+        res.status(404).send()
     }
 })
 
