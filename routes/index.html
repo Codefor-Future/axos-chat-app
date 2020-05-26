@@ -248,7 +248,7 @@
             data:{
                 invitationReceivedText:null,
                 invitationReceived:[],
-                inviteShow:true,
+                inviteShow:false,
                 selectedUser:null,
                 users:[],
                 loggedIn:false,
@@ -325,7 +325,7 @@
                 },
                 userSelected(socketid){
                     this.selectedUser=socketid
-                    
+                  
                     this.inviteShow=true
                 },
                 updateUsers(){
