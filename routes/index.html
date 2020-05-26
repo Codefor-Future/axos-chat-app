@@ -280,6 +280,7 @@
                             this.selectedUserName=this.users[user].name
                         }
                     }
+                    this.messages=[]
                 }
 
             },
@@ -325,7 +326,7 @@
                 },
                 userSelected(socketid){
                     this.selectedUser=socketid
-                    this.messages=[],
+                    
                     this.inviteShow=true
                 },
                 updateUsers(){
