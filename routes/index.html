@@ -216,7 +216,7 @@
             </div>
                 <div>
                     <h6  class="invitation" v-if="invitationReceivedText">{{invitationReceivedText}}</h6>
-                    <button class="invitation" v-if="inviteShow" class="border-0 " @click="sendInvitation">Invite</button v-if="inviteShow">
+                    <button class="invitation btn border-0 " v-if="inviteShow"  @click="sendInvitation">Invite {{selectedUserName}} for a chat</button v-if="inviteShow">
                 </div>
             
             <!-- /invitation link -->
