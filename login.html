@@ -1,443 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-<script rel="javascript" type="JavaScript" src="/socket.io/socket.io.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> 
-
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>chat</title>
+    <title>login</title>
     <style>
         body{
-            overflow: scroll;
+            background-image: url("https://image.freepik.com/free-vector/conversation-concept-illustration_114360-1102.jpg");
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position-y: top;
         }
-        .sndBtn{
-            background-color: rgba(214, 213, 213, 0.288);
+        @media only screen and (min-width:600px) {
+            body{
+                background-position-x: right;
+                background-position: top;
+                background-size: 700px;
+            }
+            .login{
+                margin-left: 70px;
+            }
+        }
+        .login{
+            position: fixed;
+            top: 45vh;
         }
         input{
-            border-radius: 20px;
+            border-radius: 30px;
             background-image: linear-gradient(20deg, rgb(25, 172, 230), rgb(21, 163, 168));
+            border:0px;
+            padding: 17px;
+        }
+        label{
+            color: rgba(37, 128, 156, 0.705);
+            margin: 10px;
+            font-size: 14px;
+        }
+        ::placeholder{
+            color:rgba(255, 255, 255, 0.568)
+        }
+        button{
+            width: 100px;
+            margin: 5px;
+            background-image: linear-gradient(20deg, rgb(99, 188, 223), rgb(21, 163, 168));
+            padding: 15px;
+            border-radius: 30px;
+            border: 0px;
+            color: rgba(255, 255, 255, 0.856);
         }
         input:focus{
             outline:none;
         }
-        .inputFieldWraper{
-            position: fixed;
-            bottom: 10px;
-            width: 90%;
-        }
-        ul{
-            padding:0px;
-            display: flex;
-            flex-direction: column-reverse;
-            width: 100%;
-            overflow:hidden;
-            overflow-y:scroll;
-        }
-        li{
-            flex: 0 0 auto;
-            overflow-wrap: break-word;
-            /* font-size: 15px; */
-            color: rgba(2, 2, 54, 0.705);
-        }
-        .listWraper{
-            height: 70vh;
-            position: relative;
-            text-align: center;
-            margin-top: 40px;
-            margin-bottom: 100px;
-            overflow: scroll;
-        }
-
-        .sendedMsg{
-            border-top-left-radius: 25px;
-            border-bottom-left-radius: 25px;
-            padding: 10px 20px;
-            margin: 10px;
-            background-color: rgba(59, 153, 153, 0.281);
-            width: 80%;
-            margin-left: 20%;
-            border-bottom-right-radius: 15px;
-
-        }
-        .recievedMsg{
-            padding: 10px 20px;
-            margin: 10px;
-            background-color: rgba(104, 243, 134, 0.39);
-            width: 80%;
-            border-bottom-right-radius: 25px;
-            border-top-right-radius: 25px;
-            border-bottom-left-radius: 15px;
-        }
-        ::placeholder{
-            color: rgba(236, 236, 236, 0.863);
-        }
-        .msgBox div{
-            float: left;
-            color: rgba(0, 0, 255, 0.63);
-            font-size: 13px;
-        }
-        .connectedFriends{
-            background-color: rgba(235, 231, 231, 0.486);
-        }
-        .flashMsg{
-            background-image: linear-gradient(90deg, rgba(255, 255, 255, 0),rgb(224, 47, 71),rgb(209, 3, 3),rgb(241, 74, 74),rgba(255, 0, 0, 0.712),rgba(255, 255, 255, 0));
-            width: 100%;
-            position: fixed;
-            top: 0px;
-            z-index: 1;
-        }
-
-
-
-        .sidebar {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: #111;
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 60px;
-}
-
-.sidebar a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 16px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-}
-
-.sidebar a:hover {
-  color: #f1f1f1;
-}
-
-.sidebar .closebtn {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-  margin-left: 50px;
-}
-
-
-#main {
-  transition: margin-left .5s;
-}
-
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-  .sidebar {padding-top: 15px;}
-  .sidebar a {font-size: 18px;}
-}
-
-.mainHead{
-    color: rgba(53, 52, 52, 0.815);
-    position: absolute;
-    top:20px;
-    right: 50px;
-}
-#mySidebar a:active{
-    background-color: rgb(141, 41, 41);
-}   
-
-.invitation{
-    position: fixed;
-    bottom: 60px;
-    right: 50px;
-    border-radius: 20px;
-    padding: 15px;
-    background-image: linear-gradient(20deg, rgb(25, 172, 230), rgb(21, 163, 168));
-}
-
-
-
-
     </style>
 </head>
 <body>
-<div id="app" class="container-fluid text-center">
-
-    <div class="flashMsg text-white" v-show="flashMsgShow">
-        {{flashMsgMsg}}
+    <div class="login">
+        <label for="username" id="userLabel">Username</label><br>
+        <input type="text" id="username" placeholder="Your Good name please"><br>
+        <button onclick="send()">Login</button>
     </div>
-
-        <div class="connectedFriends text-left">
-                <button onclick="openNav()" @click="updateUsers"  class="btn-sm btn-dark m-3">Users</button>
-
-            
-                <h2 class="mainHead">Axos</h2>
-                
-                
-                
-                
-                <div id="mySidebar" class="sidebar">
-                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-                    <a @click="userSelected(null)" class=" my-2 py-1 rounded text-white">Group</a>
-                    <a @click="userSelected(user.socketid)" v-for="user in users" :key=user.socketid class=" my-2 py-1 rounded text-white">
-                        {{user.name}}
-                        <span style="float: right;;font-size: 12px; color: white;" v-show='user.online'>online</span>
-                    </a>
-                </div>
-            </div>
-
-
-<div> 
-<!-- main messaging app -->
-    <div class="" id="main">
-
-        <h3>{{selectedUserName}}</h3>
-            <div class="listWraper">
-                <ul type=none >
-                    <li v-for="message in messages" class="msgBox text-left" :class="{'text-right':message.type==='sended', 'sendedMsg':message.type==='sended', 'recievedMsg':message.type==='recieved'}" >
-                        <div style="float: right;">
-                            {{message.user}}
-                        </div>
-                        {{message.message}}
-                    </li>
-                </ul>
-            </div>
-            <!-- invitation link -->
-            <div style="position: fixed; bottom:100px;right:0px;width: 200px;">
-                <div class="invitation" style=" position: relative;float: right;" v-for="invit in invitationReceived">
-                    <h6 class="text-white">{{invit.sender}} <span style="font-size: 12px; color: rgba(241, 241, 241, 0.644);"> for a private chat</span></h6>
-                    <button @click="invitResponse(true,invit.senderId)" class="btn border-0">Accept</button>
-                    <button @click="invitResponse(false,invit.senderId)" class="btn border-0">Reject</button>
-                </div>
-            </div>
-                <div>
-                    <h6  class="invitation" v-if="invitationReceivedText">{{invitationReceivedText}}</h6>
-                    <button class="invitation" v-if="inviteShow" class="border-0 " @click="sendInvitation">Invite</button v-if="inviteShow">
-                </div>
-            
-            <!-- /invitation link -->
-            <div class="inputFieldWraper row">
-                <input class="border-0 ml-3 px-3 py-1 col-9" type="text" v-model="newMessage" @keyup.enter="sendMsg" :placeholder="typing">
-                <button class="btn btn-sm p-2 col-2 sndBtn" @click="sendMsg">Send</button>
-            </div>
-    </div>
-</div>
-<!-- /main app  -->
-</div> 
-
-
-
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-<script src="/socket.io/socket.io.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-        var socket = io();
-
-//component
-//component
-
-
-
-        let app= new Vue({
-            el:"#app",
-            data:{
-                invitationReceivedText:null,
-                invitationReceived:[],
-                inviteShow:true,
-                selectedUser:null,
-                users:[],
-                loggedIn:false,
-                newMessage:null,
-                messages:[],
-                typing:"type your message",
-                online:true,
-                flashMsgMsg:null,
-                flashMsgShow:false,
-                selectedUserName:""
-            },
-            watch:{
-                newMessage(value){
-                    socket.emit("typing",{
-                        msg:value,
-                        to:this.selectedUser
-                    })
-                },
-                online(value){
-                    socket.emit("online",{
-                        online:value,
-                        user:socket.id
-                    })
-                },
-                selectedUser(val){
-                    for(user in this.users){
-                        if(this.users[user].socketid==this.selectedUser){
-                            this.selectedUserName=this.users[user].name
-                        }
-                    }
-                }
-
-            },
-            computed:{
-                username(){
-                    if(userName=document.cookie){
-                    array=document.cookie.split(";");
-                        if(array.length==1){
-                        return array[0].split("=")[1]
-                        }else{
-                            return " cookie error  "
-                        }
-                    }else{
-                        return " bad guy "
-                    }
-                },
-            },
-            methods:{
-                senderIndex(sender){
-                    for(invit in this.invitationReceived){
-                        if(this.invitationReceived[invit].sender==sender){
-                            return invit
-                        }
-                    }
-                },
-                invitResponse(accepted,sender){
-                    socket.emit("invitResp",accepted,sender)
-                    if(accepted){
-                        this.selectedUser=sender
-                        this.inviteShow=false
-                    }else{
-
-                    }
-                    this.invitationReceived.splice(this.senderIndex(sender),1)
-                },
-                sendInvitation(){
-                    socket.emit("invitation",{
-                        sender:this.username,
-                        to:this.selectedUser,
-                        senderId:socket.id
-                    })
-                    this.inviteShow=!this.inviteShow
-                },
-                userSelected(socketid){
-                    this.selectedUser=socketid
-                    this.messages=[],
-                    this.inviteShow=true
-                },
-                updateUsers(){
-                    socket.emit("updateUsers")
-                },
-                sendMsg(){
-                    if(this.newMessage){
-                        socket.emit("newMsg",{message:this.newMessage, sender:this.username, senderId:socket.id, to:this.selectedUser})
-                        this.messages.push({message:this.newMessage,type:"sended"})
-                        this.newMessage=null
-                    }
-                },
-                
-            },
-            created(){
-                socket.on("newMsg",(message)=>{
-                    if(message.senderId===this.selectedUser){
-                    this.messages.push({message:message.message,type:"recieved",user:message.sender})
-                    }else{
-                        this.flashMsgShow=true
-                        this.flashMsgMsg=message.sender+" --> " + message.message
-                        setTimeout(()=>{
-                            this.flashMsgMsg=null
-                            this.flashMsgShow=false
-                        },4000)
-                    }
-                })
-                socket.on("typing",(value)=>{
-                    if(value.msg){
-                        this.typing=value.msg
-                    }else{
-                        this.typing="what are you thinking..."
-                    }
-                })
-                socket.on("connect",(users)=>{
-                    if(document.cookie){
-                         this.users= users
-                        socket.emit("newUser", this.username, socket.id)
-                    }else{
-                        window.location.href="/login"
-                    }
-                   
-                })
-                socket.on("newUser",(users)=>{
-                   this.users= users
-                })
-                socket.on("updateUsers",(users)=>{
-                    this.users=users
-                })
-                socket.on("flashMsg",(msg)=>{
-                    var audio = new Audio('notifi.mp3');
-                    audio.play();
-                    this.flashMsgShow=true;
-                    this.flashMsgMsg=msg;
-                    setTimeout(()=>{
-                        this.flashMsgMsg=null
-                        this.flashMsgShow=false
-                    },3000)
-                })
-                socket.on("online",(online)=>{
-                    for(user in this.users){
-                        if(this.users[user].socketid==online.user){
-                            this.users[user].online=online.online
-                        }
-                    }
-                })
-                socket.on("invitation",(invitation)=>{
-                    this.invitationReceived.push(invitation)
-                })
-                socket.on("invitResp",(accepted)=>{
-                    if(accepted){
-                        this.invitationReceivedText= "Accepted"
-                    }else{
-                        this.invitationReceivedText= "Rejected"
-                    }
-                    setTimeout(()=>{
-                        this.invitationReceivedText=null
-                    },3000)
-                })
-
-            }
-        });
-
-
-        function vis(){
-            if(document.visibilityState=="visible"){
-                app.online=true
+        async function send(){
+            username=document.getElementById("username").value
+            if(!username){
+                document.getElementById("userLabel").innerHTML=" Try valid username"
             }else{
-                app.online=false
-            }
-        }
-        document.addEventListener("visibilitychange", vis,false)
-
-
-
-
-
-
-        function openNav() {
-  document.getElementById("mySidebar").style.width = "250px";
-  document.getElementById("main").style.marginLeft = "250px";
-}
-
-function closeNav() {
-  document.getElementById("mySidebar").style.width = "0";
-  document.getElementById("main").style.marginLeft= "0";
-}
-
-
-
-
-
-
+            await axios.post("/login",
+            {
+                username:username
+            })
+            .then(function(res){
+                if(res.status===200){
+                    window.location.href="/chat";
+                }else{
+                    document.getElementById("userLabel").innerHTML=" Try another username"
+                }
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+        }}
     </script>
 </body>
 </html>
