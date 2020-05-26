@@ -76,11 +76,12 @@ io.on("connection", (socket)=>{
         socket.emit("updateUsers",users)
     })
 
-    socket.on("newUser",(newUser,socketId)=>{
+    socket.on("newUser",(newUser,socketId,online)=>{
         console.log(newUser + " connected socketid= "+ socketId)
         users.push({
             socketid: socketId,
-            name:newUser
+            name:newUser,
+            online:online
         })
         socket.broadcast.emit("newUser", users)
         flashMsg(newUser+" joined")
