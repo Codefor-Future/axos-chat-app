@@ -182,7 +182,6 @@
                 
                 <div id="mySidebar" class="sidebar">
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-                    <a @click="userSelected(null)" class=" my-2 py-1 rounded text-white">Group</a>
                     <a @click="userSelected(user.socketid)" v-for="user in users" :key=user.socketid class=" my-2 py-1 rounded text-white">
                         {{user.name}}
                         <span style="float: right;;font-size: 12px; color: white;" v-if='user.online'>online</span>
