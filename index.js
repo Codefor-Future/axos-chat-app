@@ -14,7 +14,7 @@ const {chat}= require("./routes/handleRoutes")
 
 let port = process.env.PORT;
 if (port == null || port == "") {
-  port = 8000;
+  port = 3000;
 }
 server.listen(port,()=>{
     console.log("connection done")
@@ -54,13 +54,21 @@ io.on("connection", (socket)=>{
     }
 
     socket.on("newMsg",(newMsg)=>{
-        socket.broadcast.emit("newMsg",newMsg)
+        if(newMsg.to===null){
+            socket.broadcast.emit("newMsg",newMsg)
+        }else{
+            socket.to(newMsg.to).emit("newMsg",newMsg)
+        }
     })
     socket.on("typing",(value)=>{
-        socket.broadcast.emit("typing",value)
+        if(value.to===null){
+            socket.broadcast.emit("typing",value)
+        }else{
+            socket.to(value.to).emit("typing",value)
+        }
     })
     socket.on("online",(online)=>{
-        console.log(online)
+        socket.broadcast.emit("online",online)
     })
 
     socket.on("newUser",(newUser,socketId)=>{
@@ -74,6 +82,21 @@ io.on("connection", (socket)=>{
     })
     socket.on("updateUsers",()=>{
         socket.emit("updateUsers",users)
+    })
+    socket.on("invitation",(invitation)=>{
+        if(invitation.to==null){
+            socket.broadcast.emit("invitation",invitation)
+        }else{
+            socket.to(invitation.to).emit("invitation",invitation)
+        }
+    })
+    socket.on("invitResp",(accepted,sender)=>{
+        if(accepted){
+            socket.to(sender).emit("invitResp",accepted)
+        }else{
+            socket.to(sender).emit("invitResp",accepted)
+
+        }
     })
 
 
