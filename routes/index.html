@@ -384,13 +384,7 @@
                         this.flashMsgShow=false
                     },3000)
                 })
-                socket.on("online",(online)=>{
-                    for(user in this.users){
-                        if(this.users[user].socketid==online.user){
-                            this.users[user].online=online.online
-                        }
-                    }
-                })
+           
                 socket.on("invitation",(invitation)=>{
                     this.invitationReceived.push(invitation)
                 })
