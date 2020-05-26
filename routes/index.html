@@ -172,7 +172,7 @@
     </div>
 
         <div class="connectedFriends text-left">
-                <button onclick="openNav()" @click="updateUsers"  class="btn-sm btn-dark m-3">Users</button>
+                <button onclick="openNav()" @click="updateUsers"  class="btn-sm btn-dark m-3">Select a User</button>
 
             
                 <h2 class="mainHead">Axos</h2>
@@ -341,6 +341,10 @@
                 
             },
             created(){
+                if(this.selectedUser===null){
+                    openNav()
+                }
+                
                 socket.on("newMsg",(message)=>{
                     if(message.senderId===this.selectedUser){
                     this.messages.push({message:message.message,type:"recieved",user:message.sender})
