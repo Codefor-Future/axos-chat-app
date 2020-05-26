@@ -256,7 +256,7 @@
                 newMessage:null,
                 messages:[],
                 typing:"type your message",
-                online:false,
+                online:true,
                 flashMsgMsg:null,
                 flashMsgShow:false,
                 selectedUserName:""
@@ -364,7 +364,7 @@
                 socket.on("connect",(users)=>{
                     if(document.cookie){
                          this.users= users
-                        socket.emit("newUser", this.username, socket.id)
+                        socket.emit("newUser", this.username, socket.id,this.online)
                     }else{
                         window.location.href="/login"
                     }
