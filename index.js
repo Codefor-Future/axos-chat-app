@@ -67,8 +67,13 @@ io.on("connection", (socket)=>{
             socket.to(value.to).emit("typing",value)
         }
     })
-    socket.on("online",(online)=>{
-        socket.broadcast.emit("online",online)
+       socket.on("online",(online)=>{
+        for(user in users){
+            if(users[user].socketid==online.user){
+                users[user].online=online.online
+            }
+        }
+        socket.emit("updateUsers",users)
     })
 
     socket.on("newUser",(newUser,socketId)=>{
