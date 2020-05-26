@@ -140,15 +140,24 @@
   .sidebar a {font-size: 18px;}
 }
 
-        .mainHead{
-            color: rgba(53, 52, 52, 0.815);
-            position: fixed;
-            top:20px;
-            right: 50px;
-        }
-        
+.mainHead{
+    color: rgba(53, 52, 52, 0.815);
+    position: absolute;
+    top:20px;
+    right: 50px;
+}
+#mySidebar a:active{
+    background-color: rgb(141, 41, 41);
+}   
 
-
+.invitation{
+    position: fixed;
+    bottom: 60px;
+    right: 50px;
+    border-radius: 20px;
+    padding: 15px;
+    background-image: linear-gradient(20deg, rgb(25, 172, 230), rgb(21, 163, 168));
+}
 
 
 
@@ -162,31 +171,32 @@
         {{flashMsgMsg}}
     </div>
 
+        <div class="connectedFriends text-left">
+                <button onclick="openNav()" @click="updateUsers"  class="btn-sm btn-dark m-3">Users</button>
+
+            
+                <h2 class="mainHead">Axos</h2>
+                
+                
+                
+                
+                <div id="mySidebar" class="sidebar">
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+                    <a @click="userSelected(null)" class=" my-2 py-1 rounded text-white">Group</a>
+                    <a @click="userSelected(user.socketid)" v-for="user in users" :key=user.socketid class=" my-2 py-1 rounded text-white">
+                        {{user.name}}
+                        <span style="float: right;;font-size: 12px; color: white;" v-show='user.online'>online</span>
+                    </a>
+                </div>
+            </div>
 
 
-
-<div>
-    <div class="connectedFriends text-left">
-        <button onclick="openNav()" @click="updateUsers"  class="btn-sm btn-dark m-3">Users</button>
-
-    
-        <h2 class="mainHead">Axos</h2>
-        
-        
-        
-        
-        <div id="mySidebar" class="sidebar">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-            <a href="#" v-for="user in users" :key=user.socketid class=" my-2 py-1 rounded text-white">
-                {{user.name}}
-            </a>
-        </div>
-    </div>  
-
+<div> 
 <!-- main messaging app -->
-
     <div class="" id="main">
-            <div class="listWraper" >
+
+        <h3>{{selectedUserName}}</h3>
+            <div class="listWraper">
                 <ul type=none >
                     <li v-for="message in messages" class="msgBox text-left" :class="{'text-right':message.type==='sended', 'sendedMsg':message.type==='sended', 'recievedMsg':message.type==='recieved'}" >
                         <div style="float: right;">
@@ -196,7 +206,20 @@
                     </li>
                 </ul>
             </div>
-
+            <!-- invitation link -->
+            <div style="position: fixed; bottom:100px;right:0px;width: 200px;">
+                <div class="invitation" style=" position: relative;float: right;" v-for="invit in invitationReceived">
+                    <h6 class="text-white">{{invit.sender}} <span style="font-size: 12px; color: rgba(241, 241, 241, 0.644);"> for a private chat</span></h6>
+                    <button @click="invitResponse(true,invit.senderId)" class="btn border-0">Accept</button>
+                    <button @click="invitResponse(false,invit.senderId)" class="btn border-0">Reject</button>
+                </div>
+            </div>
+                <div>
+                    <h6  class="invitation" v-if="invitationReceivedText">{{invitationReceivedText}}</h6>
+                    <button class="invitation" v-if="inviteShow" class="border-0 " @click="sendInvitation">Invite</button v-if="inviteShow">
+                </div>
+            
+            <!-- /invitation link -->
             <div class="inputFieldWraper row">
                 <input class="border-0 ml-3 px-3 py-1 col-9" type="text" v-model="newMessage" @keyup.enter="sendMsg" :placeholder="typing">
                 <button class="btn btn-sm p-2 col-2 sndBtn" @click="sendMsg">Send</button>
@@ -214,24 +237,48 @@
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>    
     <script>
         var socket = io();
+
+//component
+//component
+
+
+
         let app= new Vue({
             el:"#app",
             data:{
+                invitationReceivedText:null,
+                invitationReceived:[],
+                inviteShow:true,
+                selectedUser:null,
                 users:[],
                 loggedIn:false,
                 newMessage:null,
                 messages:[],
                 typing:"type your message",
-                online:"online",
+                online:true,
                 flashMsgMsg:null,
-                flashMsgShow:false
+                flashMsgShow:false,
+                selectedUserName:""
             },
             watch:{
                 newMessage(value){
-                    socket.emit("typing",value)
+                    socket.emit("typing",{
+                        msg:value,
+                        to:this.selectedUser
+                    })
                 },
                 online(value){
-                    socket.emit("online",value)
+                    socket.emit("online",{
+                        online:value,
+                        user:socket.id
+                    })
+                },
+                selectedUser(val){
+                    for(user in this.users){
+                        if(this.users[user].socketid==this.selectedUser){
+                            this.selectedUserName=this.users[user].name
+                        }
+                    }
                 }
 
             },
@@ -247,28 +294,67 @@
                     }else{
                         return " bad guy "
                     }
-                }
+                },
             },
             methods:{
+                senderIndex(sender){
+                    for(invit in this.invitationReceived){
+                        if(this.invitationReceived[invit].sender==sender){
+                            return invit
+                        }
+                    }
+                },
+                invitResponse(accepted,sender){
+                    socket.emit("invitResp",accepted,sender)
+                    if(accepted){
+                        this.selectedUser=sender
+                        this.inviteShow=false
+                    }else{
+
+                    }
+                    this.invitationReceived.splice(this.senderIndex(sender),1)
+                },
+                sendInvitation(){
+                    socket.emit("invitation",{
+                        sender:this.username,
+                        to:this.selectedUser,
+                        senderId:socket.id
+                    })
+                    this.inviteShow=!this.inviteShow
+                },
+                userSelected(socketid){
+                    this.selectedUser=socketid
+                    this.messages=[],
+                    this.inviteShow=true
+                },
                 updateUsers(){
                     socket.emit("updateUsers")
                 },
                 sendMsg(){
                     if(this.newMessage){
-                    socket.emit("newMsg",{message:this.newMessage, sender:this.username})
-                    this.messages.push({message:this.newMessage,type:"sended"})
-                    this.newMessage=null
+                        socket.emit("newMsg",{message:this.newMessage, sender:this.username, senderId:socket.id, to:this.selectedUser})
+                        this.messages.push({message:this.newMessage,type:"sended"})
+                        this.newMessage=null
                     }
                 },
                 
             },
             created(){
                 socket.on("newMsg",(message)=>{
+                    if(message.senderId===this.selectedUser){
                     this.messages.push({message:message.message,type:"recieved",user:message.sender})
+                    }else{
+                        this.flashMsgShow=true
+                        this.flashMsgMsg=message.sender+" --> " + message.message
+                        setTimeout(()=>{
+                            this.flashMsgMsg=null
+                            this.flashMsgShow=false
+                        },4000)
+                    }
                 })
                 socket.on("typing",(value)=>{
-                    if(value){
-                        this.typing=value
+                    if(value.msg){
+                        this.typing=value.msg
                     }else{
                         this.typing="what are you thinking..."
                     }
@@ -298,6 +384,26 @@
                         this.flashMsgShow=false
                     },3000)
                 })
+                socket.on("online",(online)=>{
+                    for(user in this.users){
+                        if(this.users[user].socketid==online.user){
+                            this.users[user].online=online.online
+                        }
+                    }
+                })
+                socket.on("invitation",(invitation)=>{
+                    this.invitationReceived.push(invitation)
+                })
+                socket.on("invitResp",(accepted)=>{
+                    if(accepted){
+                        this.invitationReceivedText= "Accepted"
+                    }else{
+                        this.invitationReceivedText= "Rejected"
+                    }
+                    setTimeout(()=>{
+                        this.invitationReceivedText=null
+                    },3000)
+                })
 
             }
         });
@@ -305,9 +411,9 @@
 
         function vis(){
             if(document.visibilityState=="visible"){
-                app.online="online"
+                app.online=true
             }else{
-                app.online="offline"
+                app.online=false
             }
         }
         document.addEventListener("visibilitychange", vis,false)
