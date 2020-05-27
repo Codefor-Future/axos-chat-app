@@ -21,7 +21,7 @@
         }
         input{
             border-radius: 20px;
-            background-image: linear-gradient(20deg, rgb(25, 172, 230), rgb(21, 163, 168));
+            background-image: linear-gradient(20deg, rgb(25, 172, 230), rgb(5, 151, 187));
         }
         input:focus{
             outline:none;
@@ -223,9 +223,9 @@
                 </div>
             
             <!-- /invitation link -->
-            <div class="inputFieldWraper row bg-white">
+            <div class="inputFieldWraper row">
                 <input v-if="selectedUser" class="border-0 ml-3 px-3 py-1 col-9" type="text" v-model="newMessage" @keyup.enter="sendMsg" :placeholder="typing">
-                <button v-if="selectedUser" class="btn btn-sm p-2 col-2 sndBtn" @click="sendMsg">Send</button>
+                <button v-if="selectedUser" class="btn btn-sm p-2 col-2 sndBtn ml-2" @click="sendMsg">Send</button>
                 <button v-else class="btn btn-primary p-2 m-3 col-12 text-center" onclick="openNav()" id="selectFriend">Select Your Friend</button>
 
             </div>
