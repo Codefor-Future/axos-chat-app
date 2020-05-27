@@ -221,8 +221,10 @@
             
             <!-- /invitation link -->
             <div class="inputFieldWraper row">
-                <input class="border-0 ml-3 px-3 py-1 col-9" type="text" v-model="newMessage" @keyup.enter="sendMsg" :placeholder="typing">
-                <button class="btn btn-sm p-2 col-2 sndBtn" @click="sendMsg">Send</button>
+                <input v-if="selectedUser" class="border-0 ml-3 px-3 py-1 col-9" type="text" v-model="newMessage" @keyup.enter="sendMsg" :placeholder="typing">
+                <button v-if="selectedUser" class="btn btn-sm p-2 col-2 sndBtn" @click="sendMsg">Send</button>
+                <button v-else class="btn btn-sm p-2 col-12 sndBtn" onclick="sendMsg()">Select a User</button>
+
             </div>
     </div>
 </div>
