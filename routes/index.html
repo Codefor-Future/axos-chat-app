@@ -226,7 +226,7 @@
             <div class="inputFieldWraper row">
                 <input v-if="selectedUser" class="border-0 ml-3 px-3 py-1 col-9" type="text" v-model="newMessage" @keyup.enter="sendMsg" :placeholder="typing">
                 <button v-if="selectedUser" class="btn btn-sm p-2 col-2 sndBtn" @click="sendMsg">Send</button>
-                <button v-else class="btn btn-primary p-2 col-12 sndBtn" onclick="openNav()">Select a User</button>
+                <button v-else class="btn btn-primary p-2 col-12 text-center" onclick="openNav()">Select a User</button>
 
             </div>
     </div>
